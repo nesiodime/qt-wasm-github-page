@@ -16,6 +16,18 @@ Rectangle {
 
     color: Constants.backgroundColor
 
+    property int count: 0
+
+    Button {
+        id: buttonleft
+        text: qsTr("Count: " + count)
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 100
+
+        onClicked: count++
+    }
+
     Button {
         id: button
         text: qsTr("Press me")
