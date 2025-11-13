@@ -1,0 +1,59 @@
+name: Build & Deploy Qt WASM App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Qt WASM app
+        run: |
+          docker run --rm -u 0 \
+            -v ${{ github.workspace }}:/app \
+            -w /app/qt_wasm_example \
+            ghcr.io/nesiodime/qt-wasm-build-image:6.8.3 \
+            bash -lc "
+              source /opt/emsdk/emsdk_env.sh && \
+              mkdir -p build && cd build && \
+              /qtbase/bin/qt-cmake .. -DCMAKE_BUILD_TYPE=Release && \
+              cmake --build . --parallel $(nproc)
+            "
+
+      - name: Prepare artifact for GitHub Pages
+        run: |
+          mkdir -p public
+          cp -r qt_wasm_example/build/* public/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
