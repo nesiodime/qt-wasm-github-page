@@ -131,14 +131,14 @@ ENV Qt6_DIR="/qtbase/lib/cmake/Qt6"
 ENV QT_ADDITIONAL_PACKAGES_PREFIX_PATH="/qtbase/lib/cmake"
 ENV QT_ADDITIONAL_HOST_PACKAGES_PREFIX_PATH="/qtbase-host/lib/cmake"
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY examples/ /app/examples/
-COPY qml/ /app/qml/
-COPY scripts/ /app/scripts/
-COPY CMakeLists.txt /app/
+# COPY examples/ /app/examples/
+# COPY qml/ /app/qml/
+# COPY scripts/ /app/scripts/
+# COPY CMakeLists.txt /app/
 
-RUN chmod +x /app/scripts/build.sh
+# RUN chmod +x /app/scripts/build.sh
 
 # ENTRYPOINT ["/bin/bash", "-lc", "source /opt/emsdk/emsdk_env.sh && exec bash"]
 # ENTRYPOINT ["/bin/bash", "-lc"]
