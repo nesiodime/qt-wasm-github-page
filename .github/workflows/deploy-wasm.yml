@@ -36,6 +36,10 @@ jobs:
         run: |
           mkdir -p public
           cp -r qt_wasm_example/build/* public/
+          # Ensure GitHub Pages finds the main HTML file
+          if [ -f public/qt_wasm_exampleApp.html ]; then
+            cp public/qt_wasm_exampleApp.html public/index.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -43,8 +47,8 @@ jobs:
           path: public/
 
   deploy:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
